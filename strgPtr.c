@@ -148,13 +148,24 @@ void strgReverseLetters(char *s)
      * "ab-cd" becomes "dc-ba". Walking one index in from each end and
      * swapping only when both sides are letters is one way to do this.
      */
-    int slen = strgLen(s);
-    for (int i = 0; i < slen; i++) {
-        if (((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')) 
-        && ((s[slen - i - 1] >= 'A' && s[slen - i - 1] <= 'Z') || (s[slen - i - 1] >= 'a' && s[slen - i - 1] <= 'z'))) {
-            char temp = s[slen - i - 1];
-            s[slen - i - 1] = s[i];
-            s[i] = temp;
+    char *left = s;
+    char *right = s + strgLen(s) - 1;
+    while (left < right) {
+        int left_is_letter = ((*left >= 'A' && *left <= 'Z') || (*left >= 'a' && *left <= 'z'));
+        int right_is_letter = ((*right >= 'A' && *right <= 'Z') || (*right >= 'a' && *right <= 'z'));
+
+        if (!left_is_letter) {
+            left++;
+        }
+        if (!right_is_letter) {
+            right--;
+        }
+        if (right_is_letter && left_is_letter) {
+            char temp = *left;
+            *left = *right;
+            *right = temp;
+            left++;
+            right--;
         }
     }
 }
