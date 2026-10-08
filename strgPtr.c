@@ -12,7 +12,7 @@
  * the starter kit compiles with -Werror before you have written any code.
  */
 #include "strgPtr.h"
-#include "<stddef.h>"
+#include <stddef.h>
 
 int strgLen(const char *s)
 {
@@ -27,8 +27,6 @@ int strgLen(const char *s)
         s++;
     }
     return len;
-    a[1]
-    *(a = a + 1)
 }
 
 void strgCopy(const char *source, char *destination, size_t size)
@@ -133,10 +131,28 @@ void strgInterleave(const char *s1, const char *s2, char *d, size_t size)
      * two writes of a pair: the character from s1 may fit while the one from
      * s2 does not.
      */
-    (void)s1;
-    (void)s2;
-    (void)d;
-    (void)size;
+    if (s1 == NULL || s2 == NULL || d == NULL || size == 0) {
+        return;
+    }
+    char *start = d;
+    while ((size_t)(d - start) < size - 1 && (*s1 != '\0' || *s2 != '\0')) {
+        // write from s1 if s1 has not ended and room remains
+        if (*s1 != '\0' && (size_t)(d - start) < size - 1) {
+            *d = *s1;
+            d++;
+            s1++;
+        }
+
+        // write from s2 if s2 has not ended and room remains
+        if (*s2 != '\0' && (size_t)(d - start) < size - 1) {
+            *d = *s2;
+            d++;
+            s2++;
+        }
+    }
+
+    // add terminating character
+    *d = '\0';
 }
 
 void strgReverseLetters(char *s)
@@ -148,6 +164,9 @@ void strgReverseLetters(char *s)
      * "ab-cd" becomes "dc-ba". Walking one index in from each end and
      * swapping only when both sides are letters is one way to do this.
      */
+    if (s == NULL) {
+        return;
+    }
     char *left = s;
     char *right = s + strgLen(s) - 1;
     while (left < right) {
