@@ -17,10 +17,11 @@
 int strgLen(const char *s)
 {
     /* TODO: return the number of characters before the terminating '\0'. */
-    /* NULL is an error here and returns -1. */
+    // NULL returns -1.
     if (s == NULL) {
         return -1;
     }
+    // iterate through the string until '\0'
     int len = 0;
     while (*s != '\0') {
         len++;
@@ -48,7 +49,7 @@ void strgCopy(const char *source, char *destination, size_t size)
         return;
     }
     size_t index = 0;
-    while (index < size - 1 && *(source + index) != '\0') {
+    while (index < size - 1 && *(source + index) != '\0') { // copy characters while remaining within size-1
         *(destination + index) = *(source + index);
         index++;
     }
@@ -65,6 +66,7 @@ void strgChangeCase(char *s)
      * last character has no right neighbor, so only check the side that
      * exists. Characters that are not letters never change.
      */
+    // null check
      if (s == NULL) {
         return;
      }
@@ -103,11 +105,12 @@ int strgDiff(const char *s1, const char *s2)
      * When one string ends first, that position is the index of its '\0',
      * so "abc" and "abcd" differ at index 3.
      */
+    // null check
     if (s1 == NULL || s2 == NULL) {
         return -2;
     }
-    const char *start = s1;
-    while (*s1 != '\0' && *s2 != '\0') {
+    const char *start = s1; // save first address to compute index with pointer subtraction
+    while (*s1 != '\0' && *s2 != '\0') { // iterate while characters match and neither string has ended 
         if (*s1 != *s2) {
             return (int)(s1 - start);
         }
@@ -115,8 +118,9 @@ int strgDiff(const char *s1, const char *s2)
         s2++;
     }
     if (*s1 != *s2) {
-        return (int)(s1 - start);
+        return (int)(s1 - start); // return index of where mismatch is found
     }
+    // return -1 if strings are identical
     return -1;
 }
 
@@ -131,6 +135,7 @@ void strgInterleave(const char *s1, const char *s2, char *d, size_t size)
      * two writes of a pair: the character from s1 may fit while the one from
      * s2 does not.
      */
+    // null/error check
     if (s1 == NULL || s2 == NULL || d == NULL || size == 0) {
         return;
     }
@@ -164,21 +169,27 @@ void strgReverseLetters(char *s)
      * "ab-cd" becomes "dc-ba". Walking one index in from each end and
      * swapping only when both sides are letters is one way to do this.
      */
+    // null check
     if (s == NULL) {
         return;
     }
+    // create two pointers at the start and end of the string
     char *left = s;
     char *right = s + strgLen(s) - 1;
+
     while (left < right) {
         int left_is_letter = ((*left >= 'A' && *left <= 'Z') || (*left >= 'a' && *left <= 'z'));
         int right_is_letter = ((*right >= 'A' && *right <= 'Z') || (*right >= 'a' && *right <= 'z'));
 
+        // increment the left pointer if it's not a letter
         if (!left_is_letter) {
             left++;
         }
+        // decrement the right pointer if it's not a letter
         if (!right_is_letter) {
             right--;
         }
+        // swap letters
         if (right_is_letter && left_is_letter) {
             char temp = *left;
             *left = *right;
